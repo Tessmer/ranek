@@ -41,6 +41,9 @@ export default {
       }
     },
   },
+  created() {
+    document.title = "Usuário";
+  },
 };
 </script>
 

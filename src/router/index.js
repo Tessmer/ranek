@@ -9,10 +9,15 @@ import UserProductsView from "../views/user/UserProductsView.vue";
 import UserSalesView from "../views/user/UserSalesView.vue";
 import UserShopsView from "../views/user/UserShopsView.vue";
 import UserEditView from "../views/user/UserEditView.vue";
+import NotFound from "../views/NotFound.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
+  {
+    path: "*",
+    component: NotFound,
+  },
   {
     path: "/",
     name: "home",

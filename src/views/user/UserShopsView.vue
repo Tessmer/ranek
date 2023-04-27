@@ -55,6 +55,7 @@ export default {
     if (this.login) {
       this.getShops();
     }
+    document.title = "Usuário | Compras";
   },
 };
 </script>

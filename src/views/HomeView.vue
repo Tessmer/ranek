@@ -11,6 +11,9 @@ import SearchProducts from "@/components/SearchProducts.vue";
 import ProductsList from "@/components/ProductsList.vue";
 
 export default {
+  created() {
+    document.title = "Ranek";
+  },
   components: {
     SearchProducts,
     ProductsList,
