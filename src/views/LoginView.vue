@@ -5,39 +5,52 @@
     <form>
       <label for="email">E-mail</label>
       <input type="email" name="email" id="email" v-model="login.email" />
-      <label for="password">Senha</label>
-      <input
-        type="password"
-        name="password"
-        id="password"
-        v-model="login.password"
-      />
+      <label for="senha">Senha</label>
+      <input type="password" name="senha" id="senha" v-model="login.senha" />
       <button class="btn" @click.prevent="logar">Logar</button>
+      <ErrorNotes :erros="erros" />
     </form>
-    <p class="lost"><a href="/" target="_blank">Perdeu a senha?</a></p>
+    <p class="lost">
+      <a
+        href="http://ranekapilocal.local/wp-login.php?action=lostpassword"
+        target="_blank"
+        >Perdeu a senha?</a
+      >
+    </p>
     <CreateAccount />
   </section>
 </template>
 
 <script>
 import CreateAccount from "@/components/CreateAccount.vue";
+import ErrorNotes from "@/components/ErrorNotes.vue";
 
 export default {
   components: {
     CreateAccount,
+    ErrorNotes,
   },
   data() {
     return {
       login: {
         email: "",
-        password: "",
+        senha: "",
       },
+      erros: [],
     };
   },
   methods: {
     logar() {
-      this.$store.dispatch("getUser", this.login.email);
-      this.$router.push({ name: "user" });
+      this.erros = [];
+      this.$store
+        .dispatch("userLogin", this.login)
+        .then(() => {
+          this.$store.dispatch("getUser");
+          this.$router.push({ name: "usuario" });
+        })
+        .catch((error) => {
+          this.erros.push(error.response.data.message);
+        });
     },
   },
 };

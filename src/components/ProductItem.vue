@@ -1,20 +1,19 @@
 <template>
-  <div class="product" v-if="product">
+  <div class="product" v-if="produto">
     <router-link
       class="product-img"
-      :to="{ name: 'product', params: { id: product.id } }"
+      :to="{ name: 'produto', params: { id: produto.id } }"
     >
       <img
-        v-if="product.photos"
-        :src="product.photos[0].src"
-        :alt="product.photos[0].title"
+        v-if="produto.fotos"
+        :src="produto.fotos[0].src"
+        :alt="produto.fotos[0].titulo"
       />
-      <p>Ver produto</p>
     </router-link>
 
     <div class="info">
-      <p class="price">{{ product.price | priceNumber }}</p>
-      <h2 class="title">{{ product.name }}</h2>
+      <p class="price">{{ produto.preco | priceNumber }}</p>
+      <h2 class="title">{{ produto.nome }}</h2>
       <slot></slot>
     </div>
   </div>
@@ -22,7 +21,7 @@
 
 <script>
 export default {
-  props: ["product"],
+  props: ["produto"],
 };
 </script>
 
@@ -33,6 +32,13 @@ export default {
   grid-gap: 20px;
   margin-bottom: 40px;
   position: relative;
+}
+
+@media screen and (max-width: 500px) {
+  .product {
+    grid-template-columns: 1fr;
+    grid-gap: 10px;
+  }
 }
 
 .info {

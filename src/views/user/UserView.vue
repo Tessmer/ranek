@@ -3,16 +3,18 @@
     <nav class="sidenav">
       <ul>
         <li>
-          <router-link :to="{ name: 'user' }">Produtos</router-link>
+          <router-link :to="{ name: 'usuario' }">Produtos</router-link>
         </li>
         <li>
-          <router-link :to="{ name: 'shops' }">Compras</router-link>
+          <router-link :to="{ name: 'compras' }">Compras</router-link>
         </li>
         <li>
-          <router-link :to="{ name: 'sales' }">Vendas</router-link>
+          <router-link :to="{ name: 'vendas' }">Vendas</router-link>
         </li>
         <li>
-          <router-link :to="{ name: 'user-edit' }">Editar usuário</router-link>
+          <router-link :to="{ name: 'usuario-editar' }"
+            >Editar usuário</router-link
+          >
         </li>
         <li>
           <button @click.prevent="logout">Sair</button>
@@ -29,8 +31,14 @@
 export default {
   methods: {
     logout() {
-      this.$store.dispatch("userLogout");
-      this.$router.push("/login");
+      const confirm = window.confirm("Deseja sair da conta?");
+
+      if (confirm) {
+        this.$store.dispatch("userLogout");
+        this.$router.push("/login");
+      } else {
+        return;
+      }
     },
   },
 };

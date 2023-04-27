@@ -1,6 +1,7 @@
 <template>
   <section>
     <h2>Crie sua conta</h2>
+    <ErrorNotes :erros="erros" />
     <transition mode="out-in">
       <button v-if="!create" class="btn" @click="create = true">
         Criar conta
@@ -16,23 +17,29 @@
 
 <script>
 import UserForm from "../components/UserForm.vue";
+import ErrorNotes from "./ErrorNotes.vue";
+
 export default {
   components: {
     UserForm,
+    ErrorNotes,
   },
   data() {
     return {
       create: false,
+      erros: [],
     };
   },
   methods: {
     async createUser() {
+      this.erros = [];
       try {
-        await this.$store.dispatch("createUser", this.$store.state.user);
-        await this.$store.dispatch("getUser", this.$store.state.user.email);
-        this.$router.push({ name: "user" });
+        await this.$store.dispatch("createUser", this.$store.state.usuario);
+        await this.$store.dispatch("userLogin", this.$store.state.usuario);
+        await this.$store.dispatch("getUser");
+        this.$router.push({ name: "usuario" });
       } catch (error) {
-        console.log(error);
+        this.erros.push(error.response.data.message);
       }
     },
   },

@@ -1,16 +1,16 @@
 <template>
   <form class="add-product">
-    <label for="name">Nome</label>
-    <input id="name" name="name" type="text" v-model="product.name" />
-    <label for="price">Preço (R$)</label>
-    <input id="price" name="price" type="number" v-model="product.price" />
-    <label for="photos">Fotos</label>
-    <input id="photos" name="photos" type="file" ref="photos" />
-    <label for="description">Descrição</label>
+    <label for="nome">Nome</label>
+    <input id="nome" name="nome" type="text" v-model="produto.nome" />
+    <label for="preco">Preço (R$)</label>
+    <input id="preco" name="preco" type="number" v-model="produto.preco" />
+    <label for="fotos">Fotos</label>
+    <input id="fotos" name="fotos" type="file" multiple ref="fotos" />
+    <label for="descricao">Descrição</label>
     <textarea
-      id="description"
-      name="description"
-      v-model="product.description"
+      id="descricao"
+      name="descricao"
+      v-model="produto.descricao"
     ></textarea>
     <input
       class="btn"
@@ -27,24 +27,44 @@ import { api } from "@/services.js";
 export default {
   data() {
     return {
-      product: {
-        name: "",
-        price: "",
-        description: "",
-        photos: null,
-        sold: "false",
+      produto: {
+        nome: "",
+        preco: "",
+        descricao: "",
+        fotos: null,
+        vendido: "false",
       },
     };
   },
   methods: {
     formatProduct() {
-      this.product.user_id = this.$store.state.user.id;
+      const form = new FormData();
+
+      const files = this.$refs.fotos.files;
+      for (let i = 0; i < files.length; i++) {
+        form.append(files[i].name, files[i]);
+      }
+
+      form.append("nome", this.produto.nome);
+      form.append("preco", this.produto.preco);
+      form.append("descricao", this.produto.descricao);
+      form.append("vendido", this.produto.vendido);
+      form.append("usuario_id", this.$store.state.usuario.id);
+
+      return form;
     },
-    addProduct() {
-      this.formatProduct();
-      api
-        .post("/product", this.product)
-        .then(() => this.$store.dispatch("getUserProducts"));
+    async addProduct(event) {
+      const produto = this.formatProduct();
+
+      const button = event.currentTarget;
+      button.value = "Adicionando...";
+      button.setAttribute("disabled", "");
+
+      await api.post("/produto", produto);
+      await this.$store.dispatch("getUserProducts");
+
+      button.removeAttribute("disabled");
+      button.value = "Adicionar produto";
     },
   },
 };

@@ -1,26 +1,25 @@
 <template>
   <form>
     <div class="user" v-if="showLoginData">
-      <label for="name">Nome</label>
-      <input id="name" name="name" type="text" v-model="name" />
+      <label for="nome">Nome</label>
+      <input id="nome" name="nome" type="text" v-model="nome" />
       <label for="email">E-mail</label>
       <input id="email" name="email" type="text" v-model="email" />
-      <label for="password">Senha</label>
-      <input id="password" name="password" type="text" v-model="password" />
+      <label for="senha">Senha</label>
+      <input id="senha" name="senha" type="password" v-model="senha" />
     </div>
-
-    <label for="cep">CEP</label>
-    <input id="cep" name="cep" type="number" v-model="cep" @keyup="fillCep" />
-    <label for="street">Rua</label>
-    <input id="street" name="street" type="text" v-model="street" />
-    <label for="number">Número</label>
-    <input id="number" name="number" type="text" v-model="number" />
-    <label for="district">Bairro</label>
-    <input id="district" name="district" type="text" v-model="district" />
-    <label for="city">Cidade</label>
-    <input id="city" name="city" type="text" v-model="city" />
-    <label for="state">Estado</label>
-    <input id="state" name="state" type="text" v-model="state" />
+    <label for="cep">Cep</label>
+    <input id="cep" name="cep" type="text" v-model="cep" @keyup="fillCep" />
+    <label for="rua">Rua</label>
+    <input id="rua" name="rua" type="text" v-model="rua" />
+    <label for="numero">Numero</label>
+    <input id="numero" name="numero" type="text" v-model="numero" />
+    <label for="bairro">Bairro</label>
+    <input id="bairro" name="bairro" type="text" v-model="bairro" />
+    <label for="cidade">Cidade</label>
+    <input id="cidade" name="cidade" type="text" v-model="cidade" />
+    <label for="estado">Estado</label>
+    <input id="estado" name="estado" type="text" v-model="estado" />
     <div class="button">
       <slot></slot>
     </div>
@@ -35,21 +34,21 @@ export default {
   computed: {
     ...mapFields({
       fields: [
-        "name",
+        "nome",
         "email",
-        "password",
-        "street",
+        "senha",
+        "rua",
         "cep",
-        "number",
-        "district",
-        "city",
-        "state",
+        "numero",
+        "bairro",
+        "cidade",
+        "estado",
       ],
-      base: "user",
+      base: "usuario",
       mutation: "UPDATE_USER",
     }),
     showLoginData() {
-      return !this.$store.state.login || this.$route.name === "user-edit";
+      return !this.$store.state.login || this.$route.name === "usuario-editar";
     },
   },
   methods: {
@@ -57,10 +56,10 @@ export default {
       const cep = this.cep.replace(/\D/g, "");
       if (cep.length === 8) {
         getCep(cep).then((r) => {
-          this.street = r.data.logradouro;
-          this.district = r.data.bairro;
-          this.state = r.data.uf;
-          this.city = r.data.localidade;
+          this.rua = r.data.logradouro;
+          this.bairro = r.data.bairro;
+          this.estado = r.data.uf;
+          this.cidade = r.data.localidade;
         });
       }
     },

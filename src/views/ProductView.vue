@@ -1,22 +1,24 @@
 <template>
   <section>
-    <div v-if="product" class="product">
+    <div v-if="produto" class="product">
       <ul class="photos">
-        <li v-for="(photo, index) in product.photos" :key="index">
-          <img :src="photo.src" :alt="photo.title" />
+        <li v-for="(foto, index) in produto.fotos" :key="index">
+          <img :src="foto.src" :alt="foto.titulo" />
         </li>
       </ul>
       <div class="info">
-        <h1>{{ product.name }}</h1>
-        <p class="price">{{ product.price | priceNumber }}</p>
-        <p class="description">{{ product.description }}</p>
-        <transition v-if="product.sold === 'false'" mode="out-in">
-          <button class="btn" v-if="!finalize" @click="finalize = true">
+        <h1>{{ produto.nome }}</h1>
+        <p class="price">{{ produto.preco | priceNumber }}</p>
+        <p class="description">{{ produto.descricao }}</p>
+        <transition v-if="produto.vendido === 'false'" mode="out-in">
+          <button class="btn" v-if="!finalizar" @click="finalizar = true">
             Comprar
           </button>
-          <ProductCheckout v-else :product="product" />
+          <ProductCheckout v-else :produto="produto" />
         </transition>
-        <button v-else class="btn" disabled>Produto vendido</button>
+        <button v-else class="btn btn-disabled" disabled>
+          Produto vendido
+        </button>
       </div>
     </div>
     <LoadingPage v-else />
@@ -35,14 +37,14 @@ export default {
   },
   data() {
     return {
-      product: null,
-      finalize: false,
+      produto: null,
+      finalizar: false,
     };
   },
   methods: {
     getProduct() {
-      api.get(`/product/${this.id}`).then((r) => {
-        this.product = r.data;
+      api.get(`/produto/${this.id}`).then((r) => {
+        this.produto = r.data;
       });
     },
   },
@@ -69,6 +71,15 @@ export default {
   margin-bottom: 40px;
 }
 
+.photos {
+  grid-row: 1 / 3;
+}
+
+.info {
+  position: sticky;
+  top: 20px;
+}
+
 .description {
   font-size: 1.2rem;
 }
@@ -76,5 +87,23 @@ export default {
 .btn {
   margin-top: 60px;
   width: 200px;
+}
+
+img {
+  margin-bottom: 30px;
+  box-shadow: 0 4px 8px rgba(30, 60, 90, 0.2);
+  border-radius: 4px;
+}
+
+@media screen and (max-width: 500px) {
+  .product {
+    grid-template-columns: 1fr;
+  }
+  .photos {
+    grid-row: 2;
+  }
+  .info {
+    position: initial;
+  }
 }
 </style>

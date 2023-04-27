@@ -1,23 +1,19 @@
 <template>
-  <ul v-if="totalPages > 1">
-    <!--     <router-link :to="{ query: query(pages - 1) }"> ‹</router-link>
- -->
+  <ul v-if="paginasTotal > 1">
     <li v-for="page in pages" :key="page">
       <router-link :to="{ query: query(page) }">{{ page }}</router-link>
     </li>
-    <!--     <router-link :to="{ query: query(pages + 1) }">›</router-link>
- -->
   </ul>
 </template>
 
 <script>
 export default {
   props: {
-    productsPerPage: {
+    produtosPorPagina: {
       type: Number,
       default: 1,
     },
-    totalProducts: {
+    produtosTotal: {
       type: Number,
       default: 1,
     },
@@ -35,7 +31,7 @@ export default {
       const current = Number(this.$route.query._page);
       const range = 9;
       const offset = Math.ceil(range / 2);
-      const total = this.totalPages;
+      const total = this.paginasTotal;
       const pagesArray = [];
 
       for (let i = 1; i <= total; i++) {
@@ -47,8 +43,8 @@ export default {
 
       return pagesArray;
     },
-    totalPages() {
-      const total = this.totalProducts / this.productsPerPage;
+    paginasTotal() {
+      const total = this.produtosTotal / this.produtosPorPagina;
       return total !== Infinity ? Math.ceil(total) : 0;
     },
   },

@@ -19,8 +19,8 @@ const routes = [
     component: HomeView,
   },
   {
-    path: "/product/:id",
-    name: "product",
+    path: "/produto/:id",
+    name: "produto",
     component: ProductView,
     props: true,
   },
@@ -30,27 +30,30 @@ const routes = [
     component: LoginView,
   },
   {
-    path: "/user",
+    path: "/usuario",
     component: UserView,
+    meta: {
+      login: true,
+    },
     children: [
       {
         path: "",
-        name: "user",
+        name: "usuario",
         component: UserProductsView,
       },
       {
-        path: "shops",
-        name: "shops",
+        path: "compras",
+        name: "compras",
         component: UserShopsView,
       },
       {
-        path: "sales",
-        name: "sales",
+        path: "vendas",
+        name: "vendas",
         component: UserSalesView,
       },
       {
-        path: "edit",
-        name: "user-edit",
+        path: "editar",
+        name: "usuario-editar",
         component: UserEditView,
       },
     ],
@@ -64,6 +67,18 @@ const router = new VueRouter({
   scrollBehavior() {
     return window.scrollTo({ top: 0, behavior: "smooth" });
   },
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.login)) {
+    if (!window.localStorage.token) {
+      next("/login");
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;

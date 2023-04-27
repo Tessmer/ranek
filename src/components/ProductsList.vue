@@ -2,28 +2,28 @@
   <section class="products-container">
     <transition mode="out-in">
       <div
-        v-if="products && products.length > 0"
+        v-if="produtos && produtos.length > 0"
         class="products"
-        key="products"
+        key="produtos"
       >
-        <div v-for="(product, index) in products" :key="index" class="product">
-          <router-link :to="{ name: 'product', params: { id: product.id } }">
+        <div v-for="(produto, index) in produtos" :key="index" class="product">
+          <router-link :to="{ name: 'produto', params: { id: produto.id } }">
             <img
-              v-if="product.photos"
-              :src="product.photos[0].src"
-              :alt="product.photos[0].title"
+              v-if="produto.fotos"
+              :src="produto.fotos[0].src"
+              :alt="produto.fotos[0].titulo"
             />
-            <p class="price">{{ product.price | priceNumber }}</p>
-            <h2 class="title">{{ product.name }}</h2>
-            <p>{{ product.description }}</p>
+            <p class="price">{{ produto.preco | priceNumber }}</p>
+            <h2 class="title">{{ produto.nome }}</h2>
+            <p>{{ produto.descricao }}</p>
           </router-link>
         </div>
         <ThePagination
-          :totalProducts="totalProducts"
-          :productsPerPage="productsPerPage"
+          :produtosTotal="produtosTotal"
+          :produtosPorPagina="produtosPorPagina"
         />
       </div>
-      <div v-else-if="products && products.length === 0" key="no-results">
+      <div v-else-if="produtos && produtos.length === 0" key="no-results">
         <p class="no-results">
           Busca sem resultados. Tente buscar outro termo.
         </p>
@@ -45,24 +45,24 @@ export default {
   },
   data() {
     return {
-      products: null,
-      productsPerPage: 9,
-      totalProducts: 0,
+      produtos: null,
+      produtosPorPagina: 9,
+      produtosTotal: 0,
     };
   },
   computed: {
     url() {
       const query = serialize(this.$route.query);
-      return `/product?_limit=${this.productsPerPage}${query}`;
+      return `/produto?_limit=${this.produtosPorPagina}${query}`;
     },
   },
   methods: {
     getProducts() {
-      this.products = null;
+      this.produtos = null;
       window.setTimeout(() => {
         api.get(this.url).then((r) => {
-          this.totalProducts = Number(r.headers["x-total-count"]);
-          this.products = r.data;
+          this.produtosTotal = Number(r.headers["x-total-count"]);
+          this.produtos = r.data;
         });
       }, 1500);
     },
@@ -89,6 +89,14 @@ export default {
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 30px;
   margin: 30px;
+}
+
+@media screen and (max-width: 500px) {
+  .products {
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    margin: 10px;
+  }
 }
 
 .product {
